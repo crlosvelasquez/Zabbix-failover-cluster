@@ -1,0 +1,19 @@
+Timeout=30
+UnsafeUserParameters=1
+
+# =======================================================
+# MONITOREO DE FAILOVER CLUSTER (NODES, RESOURCES, VMS)
+# =======================================================
+# Teniendo en cuenta que estás utilizando Zabbix Agent 2, si la ubicación está en otro lado se deben hacer las modificaciones necesarias.
+   
+# --- Cluster Nodes ---
+UserParameter=cluster.nodes.discovery,powershell -noninteractive -file "C:\Program Files\Zabbix Agent 2\CustomScripts\FailoverClusterNodesDiscovery.ps1"
+UserParameter=cluster.node.state[*],powershell -noninteractive -file "C:\Program Files\Zabbix Agent 2\CustomScripts\FailoverClusterNodeState.ps1" $1
+   
+# --- Cluster Resources ---
+UserParameter=cluster.resources.discovery[*],powershell -noninteractive -file "C:\Program Files\Zabbix Agent 2\CustomScripts\FailoverClusterResourcesDiscovery.ps1" $1
+UserParameter=cluster.resource.state[*],powershell -noninteractive -file "C:\Program Files\Zabbix Agent 2\CustomScripts\FailoverClusterResourceState.ps1" $1
+   
+# --- Virtual Machine Networks ---
+UserParameter=cluster.vm.network.adapter.discovery,powershell -noninteractive -file "C:\Program Files\Zabbix Agent 2\CustomScripts\FailoverClusterVmNetworkDiscovery.ps1"
+UserParameter=cluster.vm.network.adapter.type[*],powershell -noninteractive -file "C:\Program Files\Zabbix Agent 2\CustomScripts\FailoverClusterVmNetworkType.ps1" $1 $2
