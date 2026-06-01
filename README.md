@@ -69,11 +69,12 @@ Restart-Service -Name "Zabbix Agent 2"
 
 1. Ingresa a la interfaz web de tu servidor Zabbix.
 2. Navega a **Configuration -> Templates** y haz clic en el botón **Import** en la esquina superior derecha.
-3. Descarga la plantilla (`zbx_export_templates.json`) de este repositorio e impórtalo.
+3. Descarga la plantilla (`Template_Windows_Failover_Cluster.json`) de este repositorio e impórtalo.
 4. Una vez importado con éxito, vincula la plantilla al Host correspondiente dentro de Zabbix.
 
 ### 📂 Estructura del Repositorio
 
+* **`README.md`:** Este archivo de documentación.
 * **`Template_Windows_Failover_Cluster.json`:** Los archivos de la plantilla oficial en múltiples formatos listos para importar en Zabbix.
 * **`zabbix_agent2.conf.example`:** Archivo que contiene el ejemplo con las líneas exactas (UserParameters) que deben agregarse a tu configuración local.
 * **/CustomScripts:** Directorio que contiene la lógica para la extracción de datos de los nodos, recursos y máquinas virtuales del clúster mediante PowerShell.
