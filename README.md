@@ -13,7 +13,6 @@ Esta solución proporciona una plantilla de Zabbix que crea ítems y disparadore
 
 Para asegurar el correcto funcionamiento de esta plantilla, tu entorno debe cumplir con lo siguiente:
 
-* **Servidor Zabbix:** Compatible con la importación de plantillas en formatos modernos (XML, YAML o JSON).
 * **Agente:** Zabbix Agent 2 instalado en cada host que desees monitorear.
 * **Permisos y Dependencias:** Ejecución de scripts locales habilitada y permisos suficientes para que el agente consulte los recursos del clúster de Windows.
 
@@ -70,13 +69,13 @@ Restart-Service -Name "Zabbix Agent 2"
 
 1. Ingresa a la interfaz web de tu servidor Zabbix.
 2. Navega a **Configuration -> Templates** y haz clic en el botón **Import** en la esquina superior derecha.
-3. Elige el formato de plantilla que prefieras descargar de este repositorio (`zbx_export_templates.xml`, `zbx_export_templates.yaml` o `zbx_export_templates.json`) e impórtalo.
+3. Descarga la plantilla (`zbx_export_templates.json`) de este repositorio e impórtalo.
 4. Una vez importado con éxito, vincula la plantilla al Host correspondiente dentro de Zabbix.
 
 ### 📂 Estructura del Repositorio
 
-* **`zbx_export_templates.[xml/yaml/json]`:** Los archivos de la plantilla oficial en múltiples formatos listos para importar en Zabbix.
-* **`zabbix_agent2.conf`:** Archivo que contiene el ejemplo con las líneas exactas (UserParameters) que deben agregarse a tu configuración local.
+* **`Template_Windows_Failover_Cluster.json`:** Los archivos de la plantilla oficial en múltiples formatos listos para importar en Zabbix.
+* **`zabbix_agent2.conf.example`:** Archivo que contiene el ejemplo con las líneas exactas (UserParameters) que deben agregarse a tu configuración local.
 * **/CustomScripts:** Directorio que contiene la lógica para la extracción de datos de los nodos, recursos y máquinas virtuales del clúster mediante PowerShell.
 
 ### 🤝 Contribuciones
