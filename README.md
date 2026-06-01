@@ -14,7 +14,7 @@ Esta solución proporciona una plantilla de Zabbix que crea ítems y disparadore
 Para asegurar el correcto funcionamiento de esta plantilla, tu entorno debe cumplir con lo siguiente:
 
 * **Servidor Zabbix:** Compatible con la importación de plantillas en formatos modernos (XML, YAML o JSON).
-* **Agente:** Zabbix Agent (o Zabbix Agent 2) instalado en cada host que desees monitorear.
+* **Agente:** Zabbix Agent 2 instalado en cada host que desees monitorear.
 * **Permisos y Dependencias:** Ejecución de scripts locales habilitada y permisos suficientes para que el agente consulte los recursos del clúster de Windows.
 
 ### ⚙️ Guía de Instalación
@@ -24,38 +24,38 @@ Sigue estos pasos en el host o servidor que deseas monitorear.
 **Paso 1: Copiar los scripts personalizados**
 
 Descarga la carpeta `CustomScripts` desde este repositorio y colócala dentro del directorio de instalación de tu agente Zabbix.
-> *Ruta recomendada:* `C:\Program Files\Zabbix Agent\CustomScripts`
+> *Ruta recomendada:* `C:\Program Files\Zabbix Agent 2\CustomScripts`
 
-**Paso 2: Configurar Zabbix Agent (`zabbix_agentd.conf`)**
+**Paso 2: Configurar Zabbix Agent 2 (`zabbix_agent2.conf`)**
 
-Abre el archivo de configuración principal de tu agente (por ejemplo, en `C:\Program Files\Zabbix Agent\zabbix_agentd.conf`) y realiza las siguientes modificaciones.
+Abre el archivo de configuración principal de tu agente (por ejemplo, en `C:\Program Files\Zabbix Agent 2\zabbix_agent2.conf`) y realiza las siguientes modificaciones.
 
 1. **Ajustes de rendimiento:** Asegúrate de buscar y modificar estas dos líneas. El tiempo de espera extendido es necesario para que las consultas de PowerShell se completen correctamente:
 
-   ```ini
+```ini
    Timeout=30
    UnsafeUserParameters=1
    ```
 
 2. **Parámetros de Usuario (UserParameters):** Añade el siguiente bloque de código al final del archivo. Esto agrupa lógicamente los descubrimientos y estados de los nodos, recursos y máquinas virtuales:
 
-   ```ini
+```ini
    # =======================================================
    # MONITOREO DE FAILOVER CLUSTER (NODES, RESOURCES, VMS)
    # =======================================================
    # Teniendo en cuenta que estás utilizando Zabbix Agent 2, si la ubicación está en otro lado se deben hacer las modificaciones necesarias.
    
    # --- Cluster Nodes ---
-   UserParameter=cluster.nodes.discovery,powershell -noninteractive -file "C:\Program Files\Zabbix Agent\CustomScripts\FailoverClusterNodesDiscovery.ps1"
-   UserParameter=cluster.node.state[*],powershell -noninteractive -file "C:\Program Files\Zabbix Agent\CustomScripts\FailoverClusterNodeState.ps1" $1
+   UserParameter=cluster.nodes.discovery,powershell -noninteractive -file "C:\Program Files\Zabbix Agent 2\CustomScripts\FailoverClusterNodesDiscovery.ps1"
+   UserParameter=cluster.node.state[*],powershell -noninteractive -file "C:\Program Files\Zabbix Agent 2\CustomScripts\FailoverClusterNodeState.ps1" $1
    
    # --- Cluster Resources ---
-   UserParameter=cluster.resources.discovery[*],powershell -noninteractive -file "C:\Program Files\Zabbix Agent\CustomScripts\FailoverClusterResourcesDiscovery.ps1" $1
-   UserParameter=cluster.resource.state[*],powershell -noninteractive -file "C:\Program Files\Zabbix Agent\CustomScripts\FailoverClusterResourceState.ps1" $1
+   UserParameter=cluster.resources.discovery[*],powershell -noninteractive -file "C:\Program Files\Zabbix Agent 2\CustomScripts\FailoverClusterResourcesDiscovery.ps1" $1
+   UserParameter=cluster.resource.state[*],powershell -noninteractive -file "C:\Program Files\Zabbix Agent 2\CustomScripts\FailoverClusterResourceState.ps1" $1
    
    # --- Virtual Machine Networks ---
-   UserParameter=cluster.vm.network.adapter.discovery,powershell -noninteractive -file "C:\Program Files\Zabbix Agent\CustomScripts\FailoverClusterVmNetworkDiscovery.ps1"
-   UserParameter=cluster.vm.network.adapter.type[*],powershell -noninteractive -file "C:\Program Files\Zabbix Agent\CustomScripts\FailoverClusterVmNetworkType.ps1" $1 $2
+   UserParameter=cluster.vm.network.adapter.discovery,powershell -noninteractive -file "C:\Program Files\Zabbix Agent 2\CustomScripts\FailoverClusterVmNetworkDiscovery.ps1"
+   UserParameter=cluster.vm.network.adapter.type[*],powershell -noninteractive -file "C:\Program Files\Zabbix Agent 2\CustomScripts\FailoverClusterVmNetworkType.ps1" $1 $2
    ```
 
 **Paso 3: Reiniciar el Agente**
@@ -63,7 +63,7 @@ Abre el archivo de configuración principal de tu agente (por ejemplo, en `C:\Pr
 Para que el agente Zabbix reconozca los nuevos parámetros y scripts, debes reiniciar el servicio en tu host. Puedes hacerlo desde la consola de Servicios de Windows o mediante PowerShell como Administrador:
 
 ```powershell
-Restart-Service -Name "Zabbix Agent"
+Restart-Service -Name "Zabbix Agent 2"
 ```
 
 **Paso 4: Importar la plantilla en Zabbix**
@@ -76,7 +76,7 @@ Restart-Service -Name "Zabbix Agent"
 ### 📂 Estructura del Repositorio
 
 * **`zbx_export_templates.[xml/yaml/json]`:** Los archivos de la plantilla oficial en múltiples formatos listos para importar en Zabbix.
-* **`zabbix_agentd.conf`:** Archivo que contiene el ejemplo con las líneas exactas (UserParameters) que deben agregarse a tu configuración local.
+* **`zabbix_agent2.conf`:** Archivo que contiene el ejemplo con las líneas exactas (UserParameters) que deben agregarse a tu configuración local.
 * **/CustomScripts:** Directorio que contiene la lógica para la extracción de datos de los nodos, recursos y máquinas virtuales del clúster mediante PowerShell.
 
 ### 🤝 Contribuciones
